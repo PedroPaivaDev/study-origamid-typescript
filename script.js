@@ -1,13 +1,21 @@
 "use strict";
-function toNumber(value) {
-    if (typeof value === 'number') {
-        return value;
-    }
-    else if (typeof value === 'string') {
-        return Number(value);
-    }
-    else {
-        throw new Error("value deve ser um número ou uma string");
-    }
+function preencherDados(dados) {
+    document.body.innerHTML += `
+  <div>
+    <h2>${dados.nome}</h2>
+    <p>R$ ${dados.preco}</p>
+    <p>Inclui teclado: ${dados.teclado ? 'sim' : 'não'}</p>
+  </div>
+  `;
 }
-console.log(toNumber(Number(true)));
+const computador = {
+    nome: 'Computador',
+    preco: 2000,
+    teclado: false,
+};
+preencherDados(computador);
+preencherDados({
+    nome: 'Notebook',
+    preco: 2500,
+    teclado: true,
+});
