@@ -1,19 +1,17 @@
 "use strict";
-const frase = 'Front End';
-const preco = 500;
-const condi = preco > 100;
-if (typeof frase === 'string') {
-    console.log('frase é string');
+let total = 200;
+total = '300';
+function isNumber(value) {
+    if (typeof value === 'number') {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
-if (typeof preco === 'number') {
-    console.log('preco é number');
-}
-if (typeof condi === 'boolean') {
-    console.log('condi é boolean');
-}
-const frase1 = new String('Front End'); //é um objeto do tipo string
-const frase2 = String('Front End'); //é uma string
-const frase3 = 'Front End'; //é uma string
-console.log(typeof frase1);
-console.log(typeof frase2);
-console.log(typeof frase3);
+console.log(isNumber(2));
+// Retorna HTMLButtonElement | null
+const button = document.querySelector('button');
+// Optional chaining
+// Executa click() se button for diferente de null/undefined
+button?.click();
