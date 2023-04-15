@@ -1,17 +1,13 @@
 "use strict";
-let total = 200;
-total = '300';
-function isNumber(value) {
+function toNumber(value) {
     if (typeof value === 'number') {
-        return true;
+        return value;
+    }
+    else if (typeof value === 'string') {
+        return Number(value);
     }
     else {
-        return false;
+        throw new Error("value deve ser um número ou uma string");
     }
 }
-console.log(isNumber(2));
-// Retorna HTMLButtonElement | null
-const button = document.querySelector('button');
-// Optional chaining
-// Executa click() se button for diferente de null/undefined
-button?.click();
+console.log(toNumber(Number(true)));
