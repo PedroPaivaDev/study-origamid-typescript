@@ -1,20 +1,19 @@
 "use strict";
-const input = document.querySelector('input');
-const total = localStorage.getItem('total');
-if (input && total) {
-    input.value = total;
-    calcularGanho(Number(input.value));
+const frase = 'Front End';
+const preco = 500;
+const condi = preco > 100;
+if (typeof frase === 'string') {
+    console.log('frase é string');
 }
-function calcularGanho(value) {
-    const p = document.querySelector('p');
-    if (p) {
-        p.innerText = `ganho total: ${value + 100 - value * 0.2}`;
-    }
+if (typeof preco === 'number') {
+    console.log('preco é number');
 }
-function totalMudou() {
-    if (input) {
-        localStorage.setItem('total', input.value);
-        calcularGanho(Number(input.value));
-    }
+if (typeof condi === 'boolean') {
+    console.log('condi é boolean');
 }
-input && input.addEventListener('keyup', totalMudou);
+const frase1 = new String('Front End'); //é um objeto do tipo string
+const frase2 = String('Front End'); //é uma string
+const frase3 = 'Front End'; //é uma string
+console.log(typeof frase1);
+console.log(typeof frase2);
+console.log(typeof frase3);
