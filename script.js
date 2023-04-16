@@ -1,20 +1,17 @@
 "use strict";
-async function fetchProduct() {
-    const response = await fetch('https://api.origamid.dev/json/notebook.json');
-    const data = await response.json();
-    showProduct(data);
+const numeros = [10, 30, 40, 5, 3, 30];
+const valores = [10, 'Taxas', 40, 'Produto', 3, 30];
+function maiorQue10(data) {
+    return data.filter((n) => n > 10);
 }
-fetchProduct();
-function showProduct(data) {
-    document.body.innerHTML = `
-    <div>
-      <h2>${data.nome}</h2>
-      <h3>R$ ${data.preco.toFixed(2)}</h3>
-      <p>${data.descricao}</p>
-      <p>${data.garantia} anos de garantia! </p>
-      ${data.seguroAcidentes && '<spam>Possui seguro em caso de acidentes</spam>'}
-      <p>Fabricante: ${data.empresaFabricante.nome}, ${data.empresaFabricante.fundacao}, ${data.empresaFabricante.pais}</p>
-      <p>Montadora: ${data.empresaMontadora.nome}, ${data.empresaMontadora.fundacao}, ${data.empresaMontadora.pais}</p>
-    </div>
-  `;
+const f1 = maiorQue10(numeros);
+function filtrarValores(data) {
+    return data.filter((item) => typeof item === 'number');
 }
+const f2 = filtrarValores(valores);
+const dados = [
+    ['senhor dos aneis', 80],
+    ['a guerra dos tronos', 120],
+];
+console.log(f1);
+console.log(f2);

@@ -1,37 +1,23 @@
-interface Empresa {
-  nome: string,
-  fundacao: number,
-  pais: string
-}
+const numeros = [10, 30, 40, 5, 3, 30];
+const valores = [10, 'Taxas', 40, 'Produto', 3, 30];
 
-interface Produto {
-  nome: string,
-  preco: number,
-  descricao: string,
-  garantia: string,
-  seguroAcidentes: boolean,
-  empresaFabricante: Empresa,
-  empresaMontadora: Empresa
+function maiorQue10(data: Array<number>) {
+  return data.filter((n) => n > 10);
 }
+// function maiorQue10(data: number[]) {
+//   return data.filter((n) => n > 10);
+// }
+const f1 = maiorQue10(numeros);
 
-async function fetchProduct() {
-  const response = await fetch('https://api.origamid.dev/json/notebook.json');
-  const data = await response.json();
-  showProduct(data);
+function filtrarValores(data: (string | number)[]) {
+  return data.filter((item) => typeof item === 'number');
 }
+const f2 = filtrarValores(valores);
 
-fetchProduct();
+const dados: (string | number)[][] = [
+  ['senhor dos aneis', 80],
+  ['a guerra dos tronos', 120],
+];
 
-function showProduct(data:Produto) {
-  document.body.innerHTML = `
-    <div>
-      <h2>${data.nome}</h2>
-      <h3>R$ ${data.preco.toFixed(2)}</h3>
-      <p>${data.descricao}</p>
-      <p>${data.garantia} anos de garantia! </p>
-      ${data.seguroAcidentes && '<spam>Possui seguro em caso de acidentes</spam>'}
-      <p>Fabricante: ${data.empresaFabricante.nome}, ${data.empresaFabricante.fundacao}, ${data.empresaFabricante.pais}</p>
-      <p>Montadora: ${data.empresaMontadora.nome}, ${data.empresaMontadora.fundacao}, ${data.empresaMontadora.pais}</p>
-    </div>
-  `;
-}
+console.log(f1)
+console.log(f2)
