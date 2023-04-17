@@ -1,23 +1,39 @@
 "use strict";
-const button = document.querySelector('button');
-const config = localStorage.getItem('config');
-if (button !== null) {
-    button.click();
+class Produto {
+    nome;
+    preco;
+    constructor(nome, preco) {
+        this.nome = nome;
+        this.preco = preco;
+    }
+    precoReal() {
+        return `R$ ${this.preco}`;
+    }
 }
-if (button) {
-    button.click();
+const livro = new Produto('A Guerra dos Tronos', 200);
+console.log(livro); //retorna um objeto com os dados inseridos
+class Livro {
+    autor;
+    constructor(autor) {
+        this.autor = autor;
+    }
 }
-if (button)
-    button.click();
-button?.click();
-console.log('null', typeof null); // retorna 'object', mas é um bug mantido no JS, para não quebrar códigos antigos, pois o 'null' é um tipo primitivo.
-let total;
-console.log('total', total); // undefined
-const data = {};
-console.log('nome', data.nome); //undefined
-const livro = {};
-const jogo = {
-    nome: 'Ragnarok',
-};
-console.log(livro.nome?.toLowerCase()); //undefined
-console.log(jogo.nome?.toLowerCase()); //ragnarok
+class Jogo {
+    jogadores;
+    constructor(jogadores) {
+        this.jogadores = jogadores;
+    }
+}
+function buscarProduto(busca) {
+    if (busca === 'O Hobbit') {
+        return new Livro('J. R. R. Tolkien');
+    }
+    if (busca === 'Dark Souls') {
+        return new Jogo(1);
+    }
+    return null;
+}
+const produto = buscarProduto('O Hobbit');
+if (produto instanceof Livro) {
+    console.log(produto.autor); //retornar 'true'
+}
