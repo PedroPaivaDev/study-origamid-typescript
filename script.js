@@ -1,39 +1,38 @@
 "use strict";
 class Produto {
     nome;
-    preco;
-    constructor(nome, preco) {
+    constructor(nome) {
         this.nome = nome;
-        this.preco = preco;
-    }
-    precoReal() {
-        return `R$ ${this.preco}`;
     }
 }
-const livro = new Produto('A Guerra dos Tronos', 200);
-console.log(livro); //retorna um objeto com os dados inseridos
-class Livro {
+class Livro extends Produto {
     autor;
-    constructor(autor) {
+    constructor(nome, autor) {
+        super(nome);
         this.autor = autor;
     }
 }
-class Jogo {
+class Jogo extends Produto {
     jogadores;
-    constructor(jogadores) {
+    constructor(nome, jogadores) {
+        super(nome);
         this.jogadores = jogadores;
     }
 }
 function buscarProduto(busca) {
     if (busca === 'O Hobbit') {
-        return new Livro('J. R. R. Tolkien');
+        return new Livro('O Hobbit', 'J. R. R. Tolkien');
     }
     if (busca === 'Dark Souls') {
-        return new Jogo(1);
+        return new Jogo('Dark Souls', 1);
     }
     return null;
 }
-const produto = buscarProduto('O Hobbit');
-if (produto instanceof Livro) {
-    console.log(produto.autor); //retornar 'true'
+const produto1 = buscarProduto('O Hobbit');
+const produto2 = buscarProduto('Dark Souls');
+if (produto1 instanceof Produto) {
+    console.log(produto1.nome); // ele é uma instancia de Produto e também de Livro
+}
+if (produto2 instanceof Produto) {
+    console.log(produto2.nome); // ele é uma instancia de Produto e também de Jogo
 }
