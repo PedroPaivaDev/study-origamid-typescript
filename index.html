@@ -4,23 +4,32 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css"></link>
   <title>TypeScript</title>
-  <style>
-    body {
-      font-size: 1.25rem;
-      font-family: sans-serif;
-      margin: 2rem;
-    }
-  </style>
 </head>
 <body>
   <div style="color: black; display: flex; flex-direction: column;">
-    <h1>Objetos e Interfaces</h1>
-    <div style="display: flex; justify-content: space-around;">
-      <a class="link" href="/">Home</a>
-      <a class="link" href="/produtos">Produtos</a>
-      <button class="link" style="font-size: 1.5rem;">Login</button>
-    </div>
+    <header id="header">
+      <a id="logo" href="">Logo</a>
+      <nav id="nav">
+        <button
+          aria-label="Abrir Menu"
+          aria-expanded="false"
+          aria-haspopup="true"
+          aria-controls="menu"
+          id="btn-mobile"
+        >
+          Menu
+          <span id="hamburger"></span>
+        </button>
+        <ul id="menu" role="menu">
+          <li><a href="/">Sobre</a></li>
+          <li><a href="/">Produtos</a></li>
+          <li><a href="/">Portfólio</a></li>
+          <li><a href="/">Contato</a></li>
+        </ul>
+      </nav>
+    </header>
   </div>
 </body>
 <script src="script.js"></script>
