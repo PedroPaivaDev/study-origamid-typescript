@@ -1,24 +1,22 @@
 "use strict";
-//exercício feito:
-// const links = document.querySelectorAll('.link');
-// Array.from(links).forEach(link => {
-//   if(link instanceof HTMLElement) {
-//     link.style.border = '2px solid green';
-//     link.style.color = 'lightGreen';
-//   }
-// })
-//resolução professor:
-const links = document.querySelectorAll('.link');
-function ativarElemento(elemento) {
-    elemento.style.border = '2px solid green';
-    elemento.style.color = 'lightGreen';
+const button = document.querySelector('button');
+function handleClick(event) {
+    console.log('handleClick.pageX', event.pageX);
 }
-links.forEach(link => {
-    if (link instanceof HTMLElement) {
-        ativarElemento(link);
+button?.addEventListener('click', handleClick);
+function handleScroll(event) {
+    console.log('handleScroll', event.type);
+}
+window.addEventListener('scroll', handleScroll);
+function ativarMenu(event) {
+    console.log('ativarMenu', event.type);
+    if (event instanceof MouseEvent) {
+        console.log('MouseEvent.pageX', event.pageX);
     }
-});
-//para mostrar diretamente o prototype de um elemento no console:
-links.forEach(link => {
-    console.dir(link.__proto__.__proto__.__proto__.__proto__.__proto__);
-});
+    if (event instanceof TouchEvent) {
+        console.log('TouchEvent.pageX', event.touches[0].pageX);
+    }
+}
+document.documentElement.addEventListener('mousedown', ativarMenu);
+document.documentElement.addEventListener('touchstart', ativarMenu);
+window.addEventListener('keydown', ativarMenu);
