@@ -1,22 +1,14 @@
 "use strict";
 const button = document.querySelector('button');
-function handleClick(event) {
-    console.log('handleClick.pageX', event.pageX);
-}
-button?.addEventListener('click', handleClick);
-function handleScroll(event) {
-    console.log('handleScroll', event.type);
-}
-window.addEventListener('scroll', handleScroll);
+// function ativarMenu(this: HTMLButtonElement, event: MouseEvent) {
+//   console.log(this); //o 'this' dentro de um callback(o eventListener), faz referência ao objeto que ele foi chamado, no caso, referente ao 'button'.
+// }
 function ativarMenu(event) {
-    console.log('ativarMenu', event.type);
-    if (event instanceof MouseEvent) {
-        console.log('MouseEvent.pageX', event.pageX);
+    const elemento = event.currentTarget;
+    if (elemento instanceof HTMLElement) {
+        elemento.style.background = 'red';
     }
-    if (event instanceof TouchEvent) {
-        console.log('TouchEvent.pageX', event.touches[0].pageX);
-    }
+    console.log(elemento);
 }
-document.documentElement.addEventListener('mousedown', ativarMenu);
-document.documentElement.addEventListener('touchstart', ativarMenu);
+button?.addEventListener('click', ativarMenu);
 window.addEventListener('keydown', ativarMenu);
