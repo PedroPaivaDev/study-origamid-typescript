@@ -1,48 +1,21 @@
 // Exemplo 1
-function handle<tipo>(a: tipo): tipo {
-  return a;
+function extractText<Tipo extends HTMLElement = HTMLElement>(el: Tipo): string {
+  return el.innerText;
 }
 
-handle('A Game').charAt(0);
-// quando é declarada uma string como parâmetro, a tipagem é interpretada como: handle<string>(a: string): string
+//Esse <Tipo extends HTMLElement = HTMLElement> quer dizer que se não passar nenhum tipo, então usar como padrão o HTMLElement
 
-handle(200).toFixed();
-// quando é declarado um number como parâmetro, a tipagem é interpretada como: handle<number>(a: number): number
+const link = document.querySelector('a');
 
-//--------------------
-// Exemplo 2
-function firstFive<Tipo>(lista: Tipo[]): Tipo[] {
-  return lista.slice(0, 5);
+if (link) {
+  console.log(extractText(link));
+  // extractText<HTMLAnchorElement extends HTMLElement>(el: HTMLAnchorElement): string
 }
 
-const numeros = [1, 3, 4, 5, 3, 20, 3, 4, 5];
-// const frutas: string[] = ['Banana', 'Pêra', 'Uva', 'Laranja', 'Limão', 'Maçã'];
-//ou
-const frutas: Array<string> = ['Banana', 'Pêra', 'Uva', 'Laranja', 'Limão', 'Maçã'];
-
-const five1 = firstFive<number>(numeros);
-const five2 = firstFive<string>(frutas);
-console.log(five1, five2)
-
-//--------------------
-// Exemplo 3
-function notNull<Tipo>(arg: Tipo) {
-  if (arg !== null) return arg;
-  else return null;
+// Exemplo 2: recriando um método do JQuery
+function $<Tipo extends Element>(selector: string): Tipo | null {
+  return document.querySelector(selector);
 }
-
-notNull(200)?.toFixed();
-notNull('André')?.toLowerCase();
-
-//--------------------
-// Exemplo 4
-function tipoDado<T>(a: T): { dado: T; tipo: string } {
-  const resultado = {
-    dado: a,
-    tipo: typeof a,
-  };
-  console.log(resultado);
-  return resultado;
-}
-
-tipoDado(true);
+// ao invés de usar o querySelector toda vez, eu uso apenas:
+console.log( $('a') );
+console.log( $<HTMLAnchorElement>('a')?.href )
