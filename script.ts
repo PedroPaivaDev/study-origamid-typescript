@@ -1,56 +1,48 @@
-// Estado dos elementos
-
-// menu inativo:
-// class="" em nav
-// aria-expanded="false" em button
-// aria-label="Abrir Menu" em button
-
-// menu ativo:
-// class="active" em nav
-// aria-expanded="true" em button
-// aria-label="Fechar Menu" em button
-
-//---------------------
-
-//exercício feito:
-// const navBar = document.querySelector('#nav');
-// const button = document.querySelector('#btn-mobile');
-// function handleClick(event:Event) {
-//   if(navBar?.className==='active') {
-//     navBar?.classList.remove("active");
-//     if(event.currentTarget instanceof HTMLButtonElement) {
-//       event.currentTarget.ariaExpanded = 'false';
-//       event.currentTarget.ariaLabel = 'Abrir Menu'
-//     }
-//   } else {
-//     navBar?.classList.add("active");
-//     if(event.currentTarget instanceof HTMLButtonElement) {
-//       event.currentTarget.ariaExpanded = 'true';
-//       event.currentTarget.ariaLabel = 'Fechar Menu'
-//     }
-//   }
-// }
-// button?.addEventListener('click', handleClick);
-
-//---------------------
-
-//resolução professor:
-const btnMobile = document.getElementById("btn-mobile");
-function toggleMenu(event:PointerEvent) {
-  const nav = document.getElementById("nav");
-  const button = event.currentTarget;
-  if(button instanceof HTMLElement && nav) {
-    const active = nav.classList.contains("active");
-    if(active) {
-      nav.classList.remove("active");
-      button.setAttribute("aria-expanded", "false");
-      button.setAttribute("aria-label", "Abrir Menu");      
-    } else {
-      nav.classList.add("active");
-      button.setAttribute("aria-expanded", "true");
-      button.setAttribute("aria-label", "Fechar Menu");
-    }
-  }
-  console.log(event);
+// Exemplo 1
+function handle<tipo>(a: tipo): tipo {
+  return a;
 }
-btnMobile?.addEventListener("pointerdown", toggleMenu)
+
+handle('A Game').charAt(0);
+// quando é declarada uma string como parâmetro, a tipagem é interpretada como: handle<string>(a: string): string
+
+handle(200).toFixed();
+// quando é declarado um number como parâmetro, a tipagem é interpretada como: handle<number>(a: number): number
+
+//--------------------
+// Exemplo 2
+function firstFive<Tipo>(lista: Tipo[]): Tipo[] {
+  return lista.slice(0, 5);
+}
+
+const numeros = [1, 3, 4, 5, 3, 20, 3, 4, 5];
+// const frutas: string[] = ['Banana', 'Pêra', 'Uva', 'Laranja', 'Limão', 'Maçã'];
+//ou
+const frutas: Array<string> = ['Banana', 'Pêra', 'Uva', 'Laranja', 'Limão', 'Maçã'];
+
+const five1 = firstFive<number>(numeros);
+const five2 = firstFive<string>(frutas);
+console.log(five1, five2)
+
+//--------------------
+// Exemplo 3
+function notNull<Tipo>(arg: Tipo) {
+  if (arg !== null) return arg;
+  else return null;
+}
+
+notNull(200)?.toFixed();
+notNull('André')?.toLowerCase();
+
+//--------------------
+// Exemplo 4
+function tipoDado<T>(a: T): { dado: T; tipo: string } {
+  const resultado = {
+    dado: a,
+    tipo: typeof a,
+  };
+  console.log(resultado);
+  return resultado;
+}
+
+tipoDado(true);
