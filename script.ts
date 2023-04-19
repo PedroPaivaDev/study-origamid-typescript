@@ -1,40 +1,46 @@
-function somar(a: number, b: number, c?: number): number {
-  return a + b + (c ? c : 0);
+//esssa declaração do "never" pode ser usado em métodos async como o fetch, quando uma url não retorna nada e eu preciso abortar a operação.
+function abortar(mensagem: string): never {
+  throw new Error(mensagem);
 }
-somar(3, 4);//o "?" declara que o terceiro parâmetro é opcional
-somar(3, 4, 1);
+// abortar('Um erro ocorreu'); //o código pára aqui.
+// console.log('Tente novamente'); //nunca é rodado
 
-//tipagem de parâmetros em uma arrow function:
-const subtrair = (a: number, b: number): number => a - b;
-subtrair(10, 2);
-
-//quando uma função não retorna nada, usamos o "void"
-//o tipo criado abaixo poderia ser usado para definir um parâmetro de uma função, que recebe outra função nesse parâmetro(callback):
-type Callback = (event: MouseEvent) => void;
-
-//--------------------
-//VOID
-//essa função não retorna nada, então ela "retorna void", no console resulta em "undefined"
-function pintarTela(cor: string) {
-  document.body.style.background = cor;
+//--------------
+//métodos em interfaces
+interface Quadrado {
+  lado: number;
+  perimetro(lado: number): number;
 }
-pintarTela('black');
-if (pintarTela('black')) {
-  // Erro, a função pintarTela() retorna void, então ela não pode ser verificada
+function calcular(forma: Quadrado) {
+  return forma.perimetro(3);
 }
 
-const btn = document.querySelector('button');
-if (btn && btn.click()) {
-  // Erro, o método click() retorna void, então ele não pode ser verificado
+//--------------
+//overloads
+//eu escrevo o cabecalho da função, mas não escrevo o corpo dela
+//assim ela pdoerá ter várias opções de declaração dos parâmetros e retornos, para apenas um único corpo
+//isso não é um javascript válido, então na compilação ele irá eliminar essa parte do overload
+// Exemplo 1
+function normalizar(valor: string): string;
+function normalizar(valor: string[]): string[];
+function normalizar(valor: string | string[]): string | string[] {
+  if (typeof valor === "string") {
+    return valor.trim().toLowerCase();
+  } else {
+    return valor.map((item) => item.trim().toLowerCase());
+  }
 }
+console.log(normalizar(" Produto ").toUpperCase());
+console.log(normalizar(["Banana ", " UVA"]).filter);
 
-// Se a função tiver qualquer tipo de retorno,
-// ela não terá mais o void como uma opção e sim o undefined
-function isString(value: any) {
-  if (typeof value === 'string') {
-    return true;
-  } //se eu declarar o "else" e um tipo de retorno, ela vai para de retornar undefined
+// Exemplo 2: seletores do JQuery
+function $(seletor: "video"): HTMLVideoElement | null;
+function $(seletor: "div"): HTMLDivElement | null;
+function $(seletor: "a"): HTMLAnchorElement | null;
+function $(seletor: string): Element | null;
+function $(seletor: string): Element | null {
+  return document.querySelector(seletor);
 }
-
-console.log(isString('teste')); //retorna true
-console.log(isString(0)); //retorna undefined
+$("a")?.href;
+$("video")?.volume;
+$(".teste")?.innerHTML;
