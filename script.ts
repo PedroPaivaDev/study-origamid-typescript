@@ -1,25 +1,43 @@
-//exercício feito:
-function arredonda(numeral:string): string;
-function arredonda(numeral:number): number;
-function arredonda(numeral: string | number): string | number {
-  const roundNumeral = Number(numeral).toFixed(0);
-  if(typeof numeral === 'string') {
-    return `${typeof numeral}: ${String(roundNumeral)}`;
-  } else {
-    return `${typeof numeral}: ${roundNumeral}`;
+//eu condiciono várias possibilidades de tipo para o seus métodos específicos
+function typeGuard(value: any) {
+  if (typeof value === 'string') {
+    return value.toLowerCase();
+  }
+  if (typeof value === 'number') {
+    return value.toFixed();
+  }
+  if (value instanceof HTMLElement) {
+    return value.innerText;
   }
 }
-console.log(arredonda('12.5'));
+typeGuard('Origamid');
+typeGuard(200);
+typeGuard(document.body);
 
 //------------
-//resolução professor:
-function arredondar(valor:number): number;
-function arredondar(valor:string): string;
-function arredondar(valor: number | string): number | string {
-  if(typeof valor === 'number') {
-    return Math.ceil(valor);
-  } else {
-    return Math.ceil(Number(valor)).toString();
+//outra forma de fazer typeGuard, é usando o método nativo do JavaScript "in"
+const obj = {
+  nome: 'Origamid',
+};
+if ('nome' in obj) {// 'nome' precisa ser passado como uma string, mesmo que seja uma chave
+  console.log('Sim');
+}
+
+interface Produto {
+  nome: string;
+  preco: number;
+}
+async function fetchProduto() {
+  const response = await fetch('https://api.origamid.dev/json/notebook.json');
+  const json = await response.json();
+  handleProduto(json);
+}
+function handleProduto(data: Produto) {
+  if ('preco' in data) {//para garantir que o preço só vai aparecer em tela, se as propriedades baterem
+    document.body.innerHTML += `
+      <p>Nome: ${data.nome}</p>
+      <p>Preço: R$ ${data.preco + 100}</p>
+    `;
   }
 }
-console.log(arredondar('200.32'));
+fetchProduto();
