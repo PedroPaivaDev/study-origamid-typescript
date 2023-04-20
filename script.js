@@ -1,30 +1,29 @@
 "use strict";
-async function fetchCursos() {
-    const response = await fetch('https://api.origamid.dev/json/cursos.json');
+async function fetchProduto() {
+    const response = await fetch('https://api.origamid.dev/json/notebook.json');
     const json = await response.json();
-    handleCursos(json);
+    handleProduto(json);
 }
-fetchCursos();
-function handleCursos(data) {
-    if (data instanceof Array) {
-        console.log('É instância de Array');
+fetchProduto();
+//não dá para usar 'instanceof', pq Produto não é uma classe
+//não dá para usar 'typeof', pq Produto tem mais de um tipo
+//a única forma de fazer o typeGuard, é usando o 'is'
+function isProduto(value) {
+    if (value && //para garantir que não seja null
+        typeof value === 'object' && //para garantir que seja um objeto
+        'nome' in value && //para garantir que o objeto tem uma chave 'nome'
+        'preco' in value //para garantir que o objeto tem uma chave 'preco'
+    ) {
+        return true;
     }
-    if (Array.isArray(data)) {
-        console.log('É array');
-    }
-}
-//------------
-//type predicate
-//de alguma forma, a gente precisa indicar que quando essa função for executada, ela vai ser booleana, a depender do tipo de dado passado para dentro dela
-function isString(value) {
-    //a partir do momento que eu uso o 'is', a função passa a retornar booleano
-    //o 'is' está declarando que o valor vai ser true, apenas se ele for uma string
-    return typeof value === 'string';
-}
-function handleData(data) {
-    if (isString(data)) { //o typeScript não vai precisar executar isso no momento da leitura, mas ele vai saber que se a isString() retornar true, quer dizer que tem uma 'string' em 'data'.
-        console.log(data.toUpperCase()); // então vai ser possível executar o método toUpperCase()
+    else {
+        return false;
     }
 }
-handleData('Origamid');
-handleData(200);
+function handleProduto(data) {
+    if (isProduto(data)) {
+        if (typeof data.nome === 'string') { //para garantir que o nome seja uma string
+            console.log(data);
+        }
+    }
+}
