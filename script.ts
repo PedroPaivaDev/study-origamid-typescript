@@ -1,24 +1,41 @@
-async function fetchProduto() {
-  const response = await fetch('https://api.origamid.dev/json/notebook.json');
+// 1 - Faça um fetch da API: https://api.origamid.dev/json/cursos.json
+// 2 - Defina a interface da API
+// 3 - Crie um Type Guard, que garanta que a API possui nome, horas e tags
+// 4 - Use Type Guards para garantir a Type Safety do código
+// 5 - Preencha os dados da API na tela.
+
+//Exercício concluído e com resolução semelhante ao do professor. Eu só não sabia que o filter podia ser usado como condicional para continuar o forEach de um array.
+
+async function fetchCursos() {
+  const response = await fetch('https://api.origamid.dev/json/cursos.json');
   const json = await response.json();
-  handleProduto(json);
+  handleCurso(json);
 }
-fetchProduto();
+fetchCursos();
 
-interface Produto {
+interface Curso {
   nome: string;
-  preco: number;
+  horas: number;
+  aulas: number;
+  gratuito: boolean;
+  tags: Array<string>;
+  idAulas: Array<number>;
+  nivel: string;
 }
 
-//não dá para usar 'instanceof', pq Produto não é uma classe
-//não dá para usar 'typeof', pq Produto tem mais de um tipo
-//a única forma de fazer o typeGuard, é usando o 'is'
-function isProduto(value: unknown): value is Produto {
-  if (
-    value && //para garantir que não seja null
-    typeof value === 'object' && //para garantir que seja um objeto
-    'nome' in value && //para garantir que o objeto tem uma chave 'nome'
-    'preco' in value //para garantir que o objeto tem uma chave 'preco'
+function handleCurso(data: unknown) {
+  if(Array.isArray(data)) {
+    renderCursos(data)
+  }
+}
+
+function isCurso(value:unknown): value is Curso {
+  if(
+      value &&
+      typeof value === 'object' &&
+      'nome' in value &&
+      'horas' in value &&
+      'tags' in value
   ) {
     return true;
   } else {
@@ -26,10 +43,25 @@ function isProduto(value: unknown): value is Produto {
   }
 }
 
-function handleProduto(data: unknown) {
-  if (isProduto(data)) {
-    if (typeof data.nome === 'string') {//para garantir que o nome seja uma string
-      console.log(data);
-    }
-  }
+function renderCursos(cursos:Array<object>) {
+  cursos.filter(isCurso).forEach((curso:Curso) => {
+    // if(isCurso(curso)) {// não consegui tipar cada 'key' do objeto, então ele não reconheceu que a 'key' pode ser usada como index. Comentei tudo e chamei cada chave para renderizar.
+      // return document.body.innerHTML += `
+      //   <div class="curso">
+      //     ${
+      //       Object.keys(curso).map((key:string) => (
+      //       `<p>${String(key)}: ${String(curso[key])}</p>`
+      //       ))
+      //     }
+      //   </div>
+      // `
+      return document.body.innerHTML += `
+      <div class="curso">
+        <p>Nome: ${curso.nome}</p>
+        <p>Horas: ${curso.horas}</p>
+        <p>Tags: ${curso.tags}</p>
+      </div>
+      `
+    // }
+  })
 }
