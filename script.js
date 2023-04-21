@@ -1,41 +1,56 @@
 "use strict";
-async function fetchData(url) {
-    const base = 'https://api.origamid.dev/json';
-    const response = await fetch(base + url);
-    return await response.json();
+// Partial<Produto> é o mesmo que colocar como opcional todas as propriedades de uma interface
+// interface Produto {
+//   nome?: string;
+//   quantidade?: number;
+// }
+const produto1 = {
+    nome: 'Notebook',
+    quantidade: 10,
+    cor: 'azul',
+};
+const produto2 = {
+    nome: 'Geladeira',
+    quantidade: 4,
+    freezer: true,
+};
+const servico1 = {
+    nome: 'Instalação',
+};
+function mostrarQuantidade(produto) {
+    console.log(produto.quantidade + 20);
 }
-async function handleData() {
-    const jogo = await fetchData('/jogo.json');
-    if (checkInterface(jogo, 'desenvolvedora')) { //o valor do tipo genérico será a interface 'Jogo', o primeiro parâmetro será o objeto 'jogo' que veio do fetch e será verificado se o segundo parâmetro é uma das 'keys' dentro do objeto 'jogo' e da interface 'Jogo'
-        console.log(jogo.desenvolvedora);
-    }
-    const livro = await fetchData('/livro.json');
-    if (checkInterface(livro, 'autor')) {
-        console.log(livro.autor);
+// function mostrarQuantidade(produto: Partial<Produto>) {
+//   // erro, quantidade pode ser undefined
+//   console.log(produto.quantidade + 20);
+// }
+mostrarQuantidade(produto1);
+mostrarQuantidade(produto2);
+// erro, pois não possui quantidade
+mostrarQuantidade(servico1); //então pode ter propriedades a mais, mas não pode ter a menos que a interface
+const artigo = {
+    titulo: 'Como aprender HTML',
+    visualizacoes: 3000,
+    tags: ['Front End', 'HTML'],
+    autor: 'André', //se não fosse o '[key: string]: unknown;', o TS não aceitaria essa propriedade na criação desse objeto, já que ele está tipado com a interface 'Post'
+};
+artigo.autor;
+artigo.descricao; //o problema é que agora a interface 'Post' permite usar/criar qualquer propriedade na chamada de propriedades do objeto
+function handlePost(post) {
+    document.body.innerHTML += `${post.autor}`;
+}
+handlePost(artigo);
+function mostrarTitulo(obj) {
+    if ('titulo' in obj) {
+        console.log(obj.titulo);
     }
 }
-handleData();
-function checkInterface(//faz a verificação de várias chaves passadas como parâmetro
-obj, ...keys
-//o valor da chave que eu passar para verificar se a interface possui a chave do objeto, deve ser uma 'keyof' da interface que está sendo verificada, caso  contrário, o TS vai avisar lá na função 'handleData'
-//foi usado o parâmetro 'rest' para que possa ser feita a verificação com mais de um chave
-) {
-    if (obj &&
-        typeof obj === 'object' &&
-        keys.filter((key) => key in obj).length === keys.length //verificando se todas as chaves passadas como parâmetro são chaves dentro do objeto passado como parâmetro
-    ) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-function checkInterfaceSimples(//faz a verificação de apenas uma chave passada como parâmetro
-obj, key) {
-    if (obj && typeof obj === 'object' && key in obj) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
+// Erros:
+// mostrarTitulo("string");
+// mostrarTitulo(200);
+// mostrarTitulo([1, 2]);
+// mostrarTitulo(null);
+// mostrarTitulo(undefined);
+mostrarTitulo({
+    titulo: 'André',
+});
