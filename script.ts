@@ -7,37 +7,26 @@
 // 7 - Ao refresh da página, preencha os valores de localStorage (caso seja UserData) no formulário e em window.UserData
 
 //-------------------------------------------------
-//EXERCÍCIO feito, mas com um problema a ser corrigido
+//RESOLUÇÃO do professor
 interface UserData {
-  nome: string;
-  email: string;
-  cpf: string;
+  nome?: string;
+  email?: string;
+  cpf?: string;
 }
 
 interface Window {
-  UserData: UserData;
+  UserData: any; //removido 'userData' e usado 'any', para permitir que qualquer string possa ser usada como chave do objeto.
+  //nas aulas posteriores será mostrada uma forma de resolver esse problema da forma correta
 }
 
-const nome = document.getElementById('nome') as HTMLInputElement;
-const email = document.getElementById('email') as HTMLInputElement;
-const cpf = document.getElementById('cpf') as HTMLInputElement;
-const localUserData = JSON.parse(window.localStorage.getItem('UserData') as string);
-
-function handleKeyUp({target}:{target:HTMLInputElement}) {
-  const id = target.id as keyof string;
-  const value = target.value;
-  window.UserData = {
-    ...window.UserData,
-    [id]: value
-  };
-  window.localStorage.setItem('UserData', JSON.stringify(window.UserData));
-}
+window.UserData = {}
 
 function isUserData(data: unknown): data is UserData {//typeGuard
   if(
     data && typeof data === 'object' &&
     ('nome' in data || 'email' in data || 'cpf' in data)
     //não faz sentido perder todos os dados, só pq o usuário não preencheu todos os campos anteriormente, então eu acho melhor usar o 'ou'
+    // ACERTEEEEEI!!! =)
   ) {
     return true;
   } else {
@@ -45,16 +34,43 @@ function isUserData(data: unknown): data is UserData {//typeGuard
   }
 }
 
+function validJSON(str: string) {
+  try {
+    JSON.parse(str);
+  } catch (err) {
+    return false;
+  }
+  return true;
+}
+
 function getUserData() {
-  if(isUserData(localUserData)) {
-    nome.value = localUserData.nome
-    email.value = localUserData.email
-    cpf.value = localUserData.cpf
-    window.UserData = localUserData;
+  const localUserData = window.localStorage.getItem('UserData');
+
+  if(localUserData && validJSON(localUserData)) {
+    const UserData = JSON.parse(localUserData);
+    if(isUserData(UserData)) {
+      Object.entries(UserData).forEach(([key, value]) => {
+        const input = document.getElementById(key);
+        if(input instanceof HTMLInputElement) {
+          input.value = value
+          window.UserData[key] = value
+        }
+      })
+    }
+  }
+}
+
+function handleKeyUp({target}:KeyboardEvent) {
+  if(target instanceof HTMLInputElement) {
+    window.UserData[target.id] = target.value;
+    //o erro de tipagem das chaves do objeto não é devido ela ser 'string', mas sim pq eu não sei qual será a 'string' passada como chave, então poderia ser alguma chave diferente das que estão tipadas na interface UserData
+    //para resolver temporariamente o problema, na 'interface de Window', eu não uso a 'interface UserData' para tipar a 'propriedade userData', mas sim um 'any'
+    window.localStorage.setItem('UserData', JSON.stringify(window.UserData));
   }
 }
 
 getUserData();
 
-document.documentElement.addEventListener('keyup', handleKeyUp);
-//só não consegui corrigir esse erro da handleKeyUp, pq ela precisa retornar void mesmo
+const form = <HTMLElement>document.getElementById('form');
+form?.addEventListener('keyup', handleKeyUp);
+//a solução para esse problema era tipar o form como 'HTMLElement' e o target da handleKeyUp como 'KeyboardEvent'

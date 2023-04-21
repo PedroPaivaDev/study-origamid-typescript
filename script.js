@@ -6,23 +6,12 @@
 // 5 - Salve UserData no localStorage
 // 6 - Crie uma User Type Guard, para verificar se o valor de localStorage é compatível com UserData
 // 7 - Ao refresh da página, preencha os valores de localStorage (caso seja UserData) no formulário e em window.UserData
-const nome = document.getElementById('nome');
-const email = document.getElementById('email');
-const cpf = document.getElementById('cpf');
-const localUserData = JSON.parse(window.localStorage.getItem('UserData'));
-function handleKeyUp({ target }) {
-    const id = target.id;
-    const value = target.value;
-    window.UserData = {
-        ...window.UserData,
-        [id]: value
-    };
-    window.localStorage.setItem('UserData', JSON.stringify(window.UserData));
-}
+window.UserData = {};
 function isUserData(data) {
     if (data && typeof data === 'object' &&
         ('nome' in data || 'email' in data || 'cpf' in data)
     //não faz sentido perder todos os dados, só pq o usuário não preencheu todos os campos anteriormente, então eu acho melhor usar o 'ou'
+    // ACERTEEEEEI!!! =)
     ) {
         return true;
     }
@@ -30,14 +19,39 @@ function isUserData(data) {
         return false;
     }
 }
+function validJSON(str) {
+    try {
+        JSON.parse(str);
+    }
+    catch (err) {
+        return false;
+    }
+    return true;
+}
 function getUserData() {
-    if (isUserData(localUserData)) {
-        nome.value = localUserData.nome;
-        email.value = localUserData.email;
-        cpf.value = localUserData.cpf;
-        window.UserData = localUserData;
+    const localUserData = window.localStorage.getItem('UserData');
+    if (localUserData && validJSON(localUserData)) {
+        const UserData = JSON.parse(localUserData);
+        if (isUserData(UserData)) {
+            Object.entries(UserData).forEach(([key, value]) => {
+                const input = document.getElementById(key);
+                if (input instanceof HTMLInputElement) {
+                    input.value = value;
+                    window.UserData[key] = value;
+                }
+            });
+        }
+    }
+}
+function handleKeyUp({ target }) {
+    if (target instanceof HTMLInputElement) {
+        window.UserData[target.id] = target.value;
+        //o erro de tipagem das chaves do objeto não é devido ela ser 'string', mas sim pq eu não sei qual será a 'string' passada como chave, então poderia ser alguma chave diferente das que estão tipadas na interface UserData
+        //para resolver temporariamente o problema, na 'interface de Window', eu não uso a 'interface UserData' para tipar a 'propriedade userData', mas sim um 'any'
+        window.localStorage.setItem('UserData', JSON.stringify(window.UserData));
     }
 }
 getUserData();
-document.documentElement.addEventListener('keyup', handleKeyUp);
-//só não consegui corrigir esse erro da handleKeyUp, pq ela precisa retornar void mesmo
+const form = document.getElementById('form');
+form?.addEventListener('keyup', handleKeyUp);
+//a solução para esse problema era tipar o form como 'HTMLElement' e o target da handleKeyUp como 'KeyboardEvent'
