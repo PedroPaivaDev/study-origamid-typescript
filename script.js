@@ -1,36 +1,38 @@
 "use strict";
-//Tuples
-//-------------------
-const produto1 = ['Notebook', 2500];
-//nesse caso, eu preciso usar o typeof para os métodos disponíveis para o tipo string
-const produto2 = ['Notebook', 2500];
-//desse modo, o primeiro elemento é uma string e o segundo elemento é um número, mas esse array vai aceitar apenas dois elementos
-const produto3 = ['Notebook', 2500, 22];
-//neste caso, ele vai aceitar o primeiro como 'string', o segundo como 'number' e o restante como 'any'
-const nome1 = produto1[0]; // string | number
-const nome2 = produto2[0]; // string
-if (typeof produto1[0] === 'string') {
-    console.log(produto1[0].toUpperCase());
+// 1 - Faça um fetch das vendas: https://api.origamid.dev/json/vendas.json
+// 2 - Defina o tipo/interface de cada venda (tuple)
+// 3 - Some o total das vendas e mostre na tela
+async function fetchVendas0() {
+    const response = await fetch('https://api.origamid.dev/json/vendas.json');
+    const json = await response.json();
+    somaVendas(json);
 }
-const [nome, preco] = produto2;
-//-------------------
-//as const
-//a palavra chave 'as const' usada no retorno da função, transforma o array do retorno em um tuple
-//assim a 'constante button' já entende que o retorno da função getText será um array readyonly com um HTMLElement e uma string
-// function getText(selector: string): null | [HTMLElement, string] {
-function getText(selector) {
-    const el = document.querySelector(selector);
-    if (el) {
-        // return [el, el.innerText];
-        return [el, el.innerText];
+function somaVendas(data) {
+    let soma = 0;
+    data.forEach((item) => {
+        soma += item[1];
+    });
+    document.body.innerHTML = `<h1>O somatório das vendas é de R$ ${soma.toFixed(2)}</h1>`;
+}
+fetchVendas0();
+//----------------
+//RESOLUÇÃO do professor
+async function fetchVendas() {
+    const response = await fetch('https://api.origamid.dev/json/vendas.json');
+    const data = await response.json();
+    somarVendas(data);
+}
+function somarVendas(vendas) {
+    // Com for loop
+    let total1 = 0;
+    for (let i = 0; i < vendas.length; i++) {
+        total1 += vendas[i][1];
     }
-    else {
-        return null;
-    }
+    document.body.innerHTML += `<p>Total1: R$ ${total1}</p>`;
+    // Com reduce
+    const total2 = vendas.reduce((total, venda) => {
+        return total + venda[1];
+    }, 0);
+    document.body.innerHTML += `<p>Total2: R$ ${total2}</p>`;
 }
-const button = getText('.buttonTeste');
-button[1] = 'teste'; //no runtime isso vai rodar, mas o TS avisa que o button é um array 'readonly' e por isso não deve ser alterado.
-if (button) {
-    const [buttonElement, buttonText] = button;
-}
-console.log(button);
+fetchVendas();
