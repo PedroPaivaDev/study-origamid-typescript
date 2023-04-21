@@ -1,57 +1,87 @@
 "use strict";
-// 1 - Crie uma interface UserData para o formulário abaixo
-// 2 - Crie uma variável global UserData no window, ela será um objeto qualquer
-// 3 - Adicione um evento de keyup ao formulário
-// 4 - Quando o evento ocorrer adicione a {[id]: value} ao UserData
-// 5 - Salve UserData no localStorage
-// 6 - Crie uma User Type Guard, para verificar se o valor de localStorage é compatível com UserData
-// 7 - Ao refresh da página, preencha os valores de localStorage (caso seja UserData) no formulário e em window.UserData
-window.UserData = {};
-function isUserData(data) {
-    if (data && typeof data === 'object' &&
-        ('nome' in data || 'email' in data || 'cpf' in data)
-    //não faz sentido perder todos os dados, só pq o usuário não preencheu todos os campos anteriormente, então eu acho melhor usar o 'ou'
-    // ACERTEEEEEI!!! =)
-    ) {
-        return true;
+//Classes
+//----------------
+//Construtores:
+// class Produto {
+//   tipo = 'produto';
+//   nome: string; //toda propriedade declarada como 'this' no construtor, precisa ser tipada aqui (no corpo da classe)
+//   preco: number | undefined; //preciso colocar undefined, pq ele foi declarado como um parâmetro opcional
+//   constructor(nome: string, preco?: number) {
+//     this.nome = nome;
+//     this.preco = preco;
+//   }
+// }
+// const livro = new Produto('O Senhor dos Anéis');
+//-----------------
+//Modificadores:
+class Produto {
+    // public: é o padrão de qualquer uma
+    tipo = 'produto'; // private: só pode ser acessada dentro da classe
+    preco; // protected: só pode ser acessada dentro da classe e subclasses
+    nome; // readonly: só permite leitura (no runtime é possível alterar o seu valor, mas em produção TS aparece um aviso dizendo que não deve ser alterado o valor da propriedade)
+    constructor(nome, preco) {
+        this.nome = nome;
+        this.tipo;
+        this.preco = preco;
+    }
+    getTipo() {
+        return this.tipo;
+    }
+    getPreco() {
+        return Produto.transformarPreco(this.preco);
+    }
+    // [javascript] static: não fará parte do Objeto criado e sim da função construtora (classe)
+    //então é por isso que no exemplo abaixo, não foi possível acessar esse método pela variável 'livro', mas sim pela classe 'Produto'
+    static transformarPreco(preco) {
+        return `R$ ${preco.toFixed(2)}`;
+    }
+}
+const livro = new Produto('O Senhor dos Aneis', 200);
+console.log(livro.getTipo());
+console.log(livro.getPreco());
+console.log(livro.nome);
+console.log(Produto.transformarPreco(100));
+//-----------------
+//Interface:
+class Quadrado {
+    lados = 4;
+    medida;
+    constructor(medida) {
+        this.medida = medida;
+    }
+    getPerimetro() {
+        return this.medida * this.lados;
+    }
+    getArea() {
+        return this.medida * this.medida;
+    }
+}
+class Circulo {
+    PI = Math.PI;
+    raio;
+    constructor(raio) {
+        this.raio = raio;
+    }
+    getPerimetro() {
+        return Math.round(2 * this.PI * this.raio * 100) / 100;
+    }
+    getArea() {
+        return Math.round(this.PI * (this.raio * this.raio) * 100) / 100;
+    }
+}
+const formas = [2, 32, 12, 3, 4, 20, 37, 9].map((n) => {
+    if (n < 15) {
+        return new Quadrado(n);
     }
     else {
-        return false;
+        return new Circulo(n);
     }
-}
-function validJSON(str) {
-    try {
-        JSON.parse(str);
+});
+formas.forEach((forma) => {
+    if (forma instanceof Quadrado) {
+        console.log(forma.getArea());
     }
-    catch (err) {
-        return false;
+    if (forma instanceof Circulo) {
+        console.log(forma.getPerimetro());
     }
-    return true;
-}
-function getUserData() {
-    const localUserData = window.localStorage.getItem('UserData');
-    if (localUserData && validJSON(localUserData)) {
-        const UserData = JSON.parse(localUserData);
-        if (isUserData(UserData)) {
-            Object.entries(UserData).forEach(([key, value]) => {
-                const input = document.getElementById(key);
-                if (input instanceof HTMLInputElement) {
-                    input.value = value;
-                    window.UserData[key] = value;
-                }
-            });
-        }
-    }
-}
-function handleKeyUp({ target }) {
-    if (target instanceof HTMLInputElement) {
-        window.UserData[target.id] = target.value;
-        //o erro de tipagem das chaves do objeto não é devido ela ser 'string', mas sim pq eu não sei qual será a 'string' passada como chave, então poderia ser alguma chave diferente das que estão tipadas na interface UserData
-        //para resolver temporariamente o problema, na 'interface de Window', eu não uso a 'interface UserData' para tipar a 'propriedade userData', mas sim um 'any'
-        window.localStorage.setItem('UserData', JSON.stringify(window.UserData));
-    }
-}
-getUserData();
-const form = document.getElementById('form');
-form?.addEventListener('keyup', handleKeyUp);
-//a solução para esse problema era tipar o form como 'HTMLElement' e o target da handleKeyUp como 'KeyboardEvent'
+});
