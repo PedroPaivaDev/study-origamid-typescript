@@ -1,39 +1,58 @@
-// desestruturar objeto
-const { body }: { body: HTMLElement } = document;
-function handleData({ nome, preco }: { nome: string; preco?: number }) {
-  // a sintaxe após os ':' é amesma da interface. Outra alternativa seria criar a interface fora da função
-  nome.includes('book');
-  preco?.toFixed();
+//-------------
+//Intersection (&) só funciona usando type
+//para interface usamos o extends
+type Produto = {
+  preco: number;
+};
+type Carro = {
+  rodas: number;
+  portas: number;
+  preco: number;//não precisa declarar esse tipo, pois ele já está na interface 'Produto'
+};
+function handleProdutoCarro(dados: Carro & Produto) {
+  dados.rodas;
+  dados.portas;
+  dados.preco;
 }
-handleData({
-  nome: 'Notebook',
-  preco: 2000,
+handleProdutoCarro({
+  preco: 20000,
+  rodas: 4,
+  portas: 5,
 });
 
-//---------------
-//conhecer os dados
-function handleClick({
-  currentTarget,
-  pageX,
-}: {
-  currentTarget: EventTarget | null;
-  pageX: number;
-}) {
-  if (currentTarget instanceof HTMLElement) {
-    currentTarget.innerHTML = `<h1>Mouse Click em x:${pageX}</h1>`;
-  }
+//-------------
+//Adicionando propriedades em interfaces e types:
+// Com Interface
+interface InterfaceCarro {
+  rodas: number;
+  portas: number;
 }
-document.documentElement.addEventListener('click', handleClick);
+interface InterfaceCarro {// basta repetir o nome da interface para adicionar uma propriedade
+  preco: number;
+}
+const dado1: InterfaceCarro = {
+  preco: 20000,
+  rodas: 4,
+  portas: 5,
+};
+// Com Type
+type TipoCarro = {
+  rodas: number;
+  portas: number;
+};
+type TipoCarroComPreco = TipoCarro & {//basta usar o intersection (&) para adicionar direto
+  preco: number;
+};
+const dado2: TipoCarroComPreco = {
+  preco: 20000,
+  rodas: 4,
+  portas: 5,
+};
 
-//----------------
-//...rest
-function comparar(tipo: 'maior' | 'menor', ...numeros: number[]) {
-  if (tipo === 'maior') {
-    return Math.max(...numeros);
-  }
-  if (tipo === 'menor') {
-    return Math.min(...numeros);
-  }
+//-------------
+//window
+interface Window {// desse modo, eu posso usar a classe nativa Window, para ter acesso global à tipagem do 'id do usuário de um app'
+  userId: number;
 }
-console.log(comparar('maior', 3, 2, 4, 30, 5, 6, 20));
-console.log(comparar('menor', 3, 2, 4, 1, 5, 6, 20));
+window.userId = 200;
+console.log(window.userId);
