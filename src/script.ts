@@ -1,11 +1,12 @@
-import { Produto, URL_BASE } from './global.js';
-import pluginSlide from './pluginSlide.js';
+declare global { //só funciona em arquivos de tipo 'module'
+//então obrigatoriamente eu preciso ter algum export neste arquivo
+  interface Usuario { //por estar declarada dentro do objeto 'declare global', a interface 'Usuario' pode ser acessada globalmente
+    nome: string;
+    id: number;
+  }
+}
 
-pluginSlide('div'); //precisou de import, pq o seu arquivo é um 'module', ele tem pelo menos um 'export' dentro dele
-
-console.log(URL_BASE); //não precisou de import, por estar em um arquivo global
-
-const livro: Produto = { //não precisou de import, por estar em um arquivo global
+export const livro: Produto = { //essa interface ele está pegando de um arquivo 'interface.d.ts'
   nome: 'O Senhor dos Anéis',
   preco: 200,
 };
