@@ -1,12 +1,11 @@
-declare global { //só funciona em arquivos de tipo 'module'
-//então obrigatoriamente eu preciso ter algum export neste arquivo
-  interface Usuario { //por estar declarada dentro do objeto 'declare global', a interface 'Usuario' pode ser acessada globalmente
-    nome: string;
-    id: number;
-  }
-}
+const body = $('body');
+console.log(body)
+body.addClass('ativo');
 
-export const livro: Produto = { //essa interface ele está pegando de um arquivo 'interface.d.ts'
-  nome: 'O Senhor dos Anéis',
-  preco: 200,
-};
+console.log(_.intersection([1, 2, 3, 5, 6], [2, 3, 1, 9]));
+
+declare const Vimeo: any; //eu não quero definir os tipos de um plugin de terceiros, então eu posso usar o 'any'
+const iframe = document.getElementById('vimeo');
+const player = new Vimeo.Player(iframe);
+
+console.log(player);

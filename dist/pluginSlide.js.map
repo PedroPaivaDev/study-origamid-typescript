@@ -1,1 +1,1 @@
-{"version":3,"file":"pluginSlide.js","sourceRoot":"","sources":["../src/pluginSlide.ts"],"names":[],"mappings":"AAAA,SAAS,WAAW,CAAC,OAAe;IAClC,OAAO,CAAC,GAAG,CAAC,gBAAgB,OAAO,EAAE,CAAC,CAAC;AACzC,CAAC;AAED,MAAM,KAAK,GAAY;IACrB,IAAI,EAAE,OAAO;IACb,EAAE,EAAE,CAAC;CACN,CAAA;AAED,eAAe,WAAW,CAAC"}
+{"version":3,"file":"pluginSlide.js","sourceRoot":"","sources":["../src/pluginSlide.ts"],"names":[],"mappings":"AAAA,SAAS,WAAW,CAAC,OAAe;IAClC,OAAO,CAAC,GAAG,CAAC,gBAAgB,OAAO,EAAE,CAAC,CAAC;AACzC,CAAC;AAOD,eAAe,WAAW,CAAC"}
