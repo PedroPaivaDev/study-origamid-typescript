@@ -1,68 +1,14 @@
 {
-  // Compila ao salvar
-  "compileOnSave": true,
-
-  // Opções do compilador
   "compilerOptions": {
-
-    // Versão do JavaScript gerado
     "target": "ESNext",
-
-    // Versão do type module, só funciona quando estamos trabalhando com Node.js
-    // Só funciona com o 'live server', pois ele precisa das funções http para utilizar o TypeModule
-    // O typeModule permite exportar funções novas para o script
-    // lá no index.html, precisa ser importador o script dessa forma: <script type="module" src="script.js"></script>
-    // se não for trabalhar com modules, precisa colocar "CommonJS"
-    "module": "ESNext",
-
-    // Vai usar bibliotecas do ESNext e do DOM
-    // Se eu estivesse executando com o Node.js e criado um JS para Node, ele é executado na minha máquina e não no browser, ele não tem acesso ao DOM
-    // então ele não iria reconhecer chamadas como 'document.querySelector'
-    "lib": ["ESNext", "DOM"],
-
-    // Gera source map ao compilar, para que durante o desenvolvimento, o browser indique os erros referentes às linhas do arquivo '.ts' e não o compilado '.js'
     "sourceMap": true,
-
-    // interrompe o compilamento se estiver como 'true'
-    "noEmit": false,
-
-    // Se estiver false, ele não impede de importar arquivos JavaScript, mas aponta um aviso disendo que encontrou o arquivo '.ts' correspondente
-    // "allowJs": true
-
-    // Remove os comentários depois da compilação
+    "allowJs": true,
     "removeComments": true,
-
-    // Modo estrito total (inclui todas as opções abaixo[strict] e outras mais)
-    // "strict": true,
-
-    // [strict] Adiciona "use strict" ao JavaScript compilado, mas apenas quando o import do script no html não for "type='module'"
-    // isso acontece porque por padrão, um arquivo de "type='module'" já possui as características do modo estrito
-    "alwaysStrict": true,
-
-    // [strict] Vai avisar sempre que um valor for do tipo 'any', então é necessario indicar o tipo de dado que não estão inferidos
-    // mas ele apenas indica isso quando algo está sem tipo, então caso eu declare o tipo como 'any' no código, ele não vai avisar nada
-    "noImplicitAny": true,
-
-    // [strict] Verifica a possibilidade do dado ser null | undefined
-    "strictNullChecks": true,
-
-    // [strict] O TS demanda que seja declarado o tipo do this nos parâmetros da função
-    "noImplicitThis": true,
-
-    // [strict] Indica a possibilidade de retorno undefined de uma função
+    "strict": true,
     "noImplicitReturns": true,
-
-    // Indica parâmetros e variáveis que não foram utilizados
-    // mas o próprio EsLint do VSCode já indica quando isso acontece, deixando o código esmaecido
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-
-    // Cria automaticamente uma pasta para armazenar os arquivos compilados
-    "outDir": "dist"
+    "outDir": "dist",
+    "isolatedModules": true
   },
-  // Compila apenas o que está na pasta espessificada, no caso é a pasta 'src'
   "include": ["src"],
-
-  // Não compila o que estiver em uma pasta específica, no caso é a pasta 'node_modules'
-  // "exclude": ["node_modules"]
+  "exclude": ["node_modules"]
 }
