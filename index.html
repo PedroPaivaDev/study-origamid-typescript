@@ -1,60 +1,13 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css"></link>
-  <title>TypeScript</title>
-</head>
-<body>
-  <div style="color: black; display: flex; flex-direction: column;">
-    <header id="header">
-      <a id="logo" href="https://www.origamid.com">Logo</a>
-      <nav id="nav">
-        <button
-          aria-label="Abrir Menu"
-          aria-expanded="false"
-          aria-haspopup="true"
-          aria-controls="menu"
-          id="btn-mobile"
-        >
-          Menu
-          <span id="hamburger"></span>
-        </button>
-        <ul id="menu" role="menu">
-          <li><a href="/">Sobre</a></li>
-          <li><a href="/">Produtos</a></li>
-          <li><a href="/">Portfólio</a></li>
-          <li><a href="/">Contato</a></li>
-        </ul>
-      </nav>
-    </header>
-  </div>
-  <form
-    style="display: flex; flex-direction: column; gap: 10px; margin: 20px;"
-    id="form"
-  >
-    <label>
-      Nome:
-      <input id="nome" type="text">
-    </label>
-    <label>
-      Email:
-      <input id="email" type="text">
-    </label>
-    <label>
-      CPF:
-      <input id="cpf" type="text">
-    </label>
-  </form>
-  <button class="buttonTeste">Clique aqui</button>
-
-  <iframe id="vimeo" src="https://player.vimeo.com/video/76979871?h=8272103f6e" width="640" height="360" frameborder="0" allowfullscreen allow="autoplay; encrypted-media"></iframe>
-  <script src="https://player.vimeo.com/api/player.js"></script>
-  
-  <script src="./node_modules/jquery/dist/jquery.min.js"></script>
-  <script src="./node_modules/lodash/lodash.min.js"></script>
-  <script type="module" src="./dist/script.js"></script>
-</body>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + TS</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
 </html>
