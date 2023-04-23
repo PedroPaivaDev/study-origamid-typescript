@@ -1,16 +1,16 @@
 import './style.css';
 import fetchData from './fetchData';
 
-interface Venda {
-  status: string,
-  id: number,
-  data: string,
-  nome: string,
-  pagamento: "Boleto" | "Cartão de Crédito",
-  email: string,
-  valor: number,
-  novo: boolean
-}
+// interface Venda {
+//   status: string,
+//   id: number,
+//   data: string,
+//   nome: string,
+//   pagamento: "Boleto" | "Cartão de Crédito",
+//   email: string,
+//   valor: number,
+//   novo: boolean
+// }
 
 async function normalizeData() {
   const data:Array<object> = await fetchData()
