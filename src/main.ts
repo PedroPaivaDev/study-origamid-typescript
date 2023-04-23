@@ -1,24 +1,34 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import './style.css';
+import fetchData from './fetchData';
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+interface Venda {
+  status: string,
+  id: number,
+  data: string,
+  nome: string,
+  pagamento: "Boleto" | "Cartão de Crédito",
+  email: string,
+  valor: number,
+  novo: boolean
+}
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+async function normalizeData() {
+  const data:Array<object> = await fetchData()
+  data.forEach((element:any) => {
+    const keys = Object.keys(element)
+    const newData = {
+      status: String(element[keys[0]]),
+      id: Number(element[keys[1]]),
+      data: String(element[keys[2]]),
+      nome: String(element[keys[3]]),
+      pagamento: String(element[keys[4]]),
+      email: String(element[keys[5]]),
+      valor: Number(element[keys[6]]),
+      novo: element[keys[7]]===1 ? true : false
+    }
+    console.log(newData)    
+  });
+}
+
+normalizeData()
+
