@@ -7,7 +7,26 @@
     <title>Vite + TS</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <h2>Estatísticas</h2>
+      <p id="total">Total: </p>
+      <div id="pagamento"></div>
+      <div id="status"></div>
+      <p id="dia">Dia com mais vendas: <spam></spam></p>
+      <h2>Dados</h2>
+      <table>
+        <thead>
+          <tr class="thead">
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Compra</th>
+            <th>Pagamento</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="transacoesBody"></tbody>
+      </table>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

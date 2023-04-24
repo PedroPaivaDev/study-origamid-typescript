@@ -1,7 +1,8 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: sans-serif;
   line-height: 1.5;
   font-weight: 400;
+  font-size: 16px;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
@@ -29,6 +30,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  font-size: 1.25rem;
 }
 
 h1 {
@@ -36,32 +38,20 @@ h1 {
   line-height: 1.1;
 }
 
+h2, p {
+  margin-left: 16px;
+  text-align: left;
+}
+
 #app {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vanilla:hover {
-  filter: drop-shadow(0 0 2em #3178c6aa);
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }
 
 button {
@@ -94,4 +84,13 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+#transacoesBody td, #app table thead tr th {
+  vertical-align: middle;
+  text-align: left;
+  padding: 8px 16px;
+}
+table tr:nth-child(even) {
+  background-color: ghostwhite;
 }
