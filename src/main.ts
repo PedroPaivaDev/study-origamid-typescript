@@ -5,7 +5,7 @@ declare global {
   interface Venda {
     status: string,
     id: number,
-    data: string,
+    data: Date,
     nome: string,
     pagamento: string,
     email: string,
@@ -94,11 +94,28 @@ function mostrarStatus(data:Array<Venda>) {
 
 function mostrarDiaTopVendas(data:Array<Venda>) {
   const dia = document.getElementById('dia');
-  let topDayObject:object = data.reduce((prev, curr) => {
+  const topDayObject = data.reduce((prev, curr) => {
+    const weekDay = new Intl.DateTimeFormat('pt-BR', { weekday: 'long' }).format(curr.data)
     return {
       ...prev,
-      [curr.data]: curr.data+1
+      [weekDay]: prev[weekDay] + 1
     }
-  }, {});
-  if(dia) dia.innerText += ` ${Object.keys(topDayObject)}`;
+  }, {
+    ['segunda-feira']: 0,
+    ['terça-feira']: 0,
+    ['quarta-feira']: 0,
+    ['quinta-feira']: 0,
+    ['sexta-feira']: 0,
+    ['sábado']: 0,
+    domingo: 0
+  });
+  let topDay:string = '';
+  let highest:number = 0;
+  Object.keys(topDayObject).forEach((curr) => {
+    if(topDayObject[curr] > highest) {
+      topDay = curr;
+      highest = topDayObject[curr];
+    }
+  })
+  if(dia) dia.innerText += ` ${topDay}`;
 }
