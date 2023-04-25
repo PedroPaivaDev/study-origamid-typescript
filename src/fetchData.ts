@@ -1,10 +1,30 @@
-export default async function fetchData() {
-  const response = await fetch('https://api.origamid.dev/json/transacoes.json');
-  const json = await response.json();
-  return normalizeDados(json);
+export default async function fetchData(url: string) {
+  try {
+    const response = await fetch(url);
+    const json:TransacaoAPI[] = await response.json();
+    if(!response.ok) throw new Error("Erro: " + response.status)
+    return normalizeDados(json);
+  } catch (error) {
+    if(error instanceof Error) console.error("fetchData: " + error.message)
+    return null;
+  }
 }
 
-function normalizeDados(data: Array<object>) {
+type TransacaoPagamento = "Boleto" | "Cartão de Crédito";
+type TransacaoStatus = "Paga" | "Recusada pela operadora de cartão" | "Aguardando pagamento" | "Estornada";
+
+interface TransacaoAPI {
+  Status: TransacaoStatus;
+  ID: number;
+  Data: string;
+  Nome: string;
+  ["Forma de Pagamento"]: TransacaoPagamento;
+  Email: string;
+  ["Valor (R$)"]: string;
+  ["Cliente Novo"]: number;
+}
+
+function normalizeDados(data: TransacaoAPI[]) {
   let newData:Array<Venda> = []
   data.forEach((element:any) => {
     const keys = Object.keys(element)

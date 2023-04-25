@@ -15,12 +15,14 @@ declare global {
 }
 
 async function mostrarDados() {
-  const data:Array<Venda> = await fetchData();
-  mostrarTransacoes(data);
-  mostrarTotal(data);
-  mostrarPagamentos(data);
-  mostrarStatus(data);
-  mostrarDiaTopVendas(data);
+  const data = await fetchData('https://api.origamid.dev/json/transacoes.json');
+  if(data) {
+    mostrarTransacoes(data);
+    mostrarTotal(data);
+    mostrarPagamentos(data);
+    mostrarStatus(data);
+    // mostrarDiaTopVendas(data);
+  }
 }
 mostrarDados()
 
@@ -92,30 +94,30 @@ function mostrarStatus(data:Array<Venda>) {
   `;
 }
 
-function mostrarDiaTopVendas(data:Array<Venda>) {
-  const dia = document.getElementById('dia');
-  const topDayObject = data.reduce((prev, curr) => {
-    const weekDay = new Intl.DateTimeFormat('pt-BR', { weekday: 'long' }).format(curr.data)
-    return {
-      ...prev,
-      [weekDay]: prev[weekDay] + 1
-    }
-  }, {
-    ['segunda-feira']: 0,
-    ['terça-feira']: 0,
-    ['quarta-feira']: 0,
-    ['quinta-feira']: 0,
-    ['sexta-feira']: 0,
-    ['sábado']: 0,
-    domingo: 0
-  });
-  let topDay:string = '';
-  let highest:number = 0;
-  Object.keys(topDayObject).forEach((curr) => {
-    if(topDayObject[curr] > highest) {
-      topDay = curr;
-      highest = topDayObject[curr];
-    }
-  })
-  if(dia) dia.innerText += ` ${topDay}`;
-}
+// function mostrarDiaTopVendas(data:Array<Venda>) {
+//   const dia = document.getElementById('dia');
+//   const topDayObject = data.reduce((prev, curr) => {
+//     const weekDay = new Intl.DateTimeFormat('pt-BR', { weekday: 'long' }).format(curr.data)
+//     return {
+//       ...prev,
+//       [weekDay]: prev[weekDay] + 1
+//     }
+//   }, {
+//     ['segunda-feira']: 0,
+//     ['terça-feira']: 0,
+//     ['quarta-feira']: 0,
+//     ['quinta-feira']: 0,
+//     ['sexta-feira']: 0,
+//     ['sábado']: 0,
+//     domingo: 0
+//   });
+//   let topDay:string = '';
+//   let highest:number = 0;
+//   Object.keys(topDayObject).forEach((curr) => {
+//     if(topDayObject[curr] > highest) {
+//       topDay = curr;
+//       highest = topDayObject[curr];
+//     }
+//   })
+//   if(dia) dia.innerText += ` ${topDay}`;
+// }
