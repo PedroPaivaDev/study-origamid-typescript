@@ -14,9 +14,9 @@ async function mostrarDados() {
 mostrarDados()
 
 function mostrarTransacoes(data:Array<Venda>) {
-  const app = document.getElementById('transacoesBody');
+  const transacoesBody = document.getElementById('transacoesBody');
   data.forEach(element => {
-    if(app) app.innerHTML += `
+    if(transacoesBody) transacoesBody.innerHTML += `
       <tr>
         <td>${element.nome}</td>
         <td>${element.email}</td>

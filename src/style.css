@@ -38,9 +38,20 @@ h1 {
   line-height: 1.1;
 }
 
+h2 {
+  border-top: 6px solid ghostwhite;
+  width: 100%;
+  padding-top: 1rem;
+}
+
 h2, p {
   margin-left: 16px;
   text-align: left;
+}
+
+#app div {
+  border-top: 3px solid ghostwhite;
+  width: 100%;
 }
 
 #app {
@@ -86,11 +97,16 @@ button:focus-visible {
   }
 }
 
-#transacoesBody td, #app table thead tr th {
-  vertical-align: middle;
+table {
+  border-spacing: 0;
   text-align: left;
+}
+
+table td, table th {
+  vertical-align: middle;
   padding: 8px 16px;
 }
+
 table tr:nth-child(even) {
   background-color: ghostwhite;
 }
