@@ -1,17 +1,34 @@
 import './style.css';
 import fetchData from './fetchData';
+import Estatisticas from './Estatisticas';
 
 async function mostrarDados() {
   const data = await fetchData('https://api.origamid.dev/json/transacoes.json?');
   if(data) {
     mostrarTransacoes(data);
-    mostrarTotal(data);
+    // mostrarTotal(data);
     mostrarPagamentos(data);
     mostrarStatus(data);
     // mostrarDiaTopVendas(data);
+    preencherEstatisticas(data);
   }
 }
 mostrarDados()
+
+function preencherEstatisticas(transacoes: Venda[]) {
+  const data = new Estatisticas(transacoes);
+  const totalElement = document.querySelector<HTMLElement>("#total span");
+  if(totalElement) {
+    totalElement.innerHTML = converterParaMoeda(data.total);
+  }
+}
+
+function converterParaMoeda(number:number) {
+  return number.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL"
+  });
+}
 
 function mostrarTransacoes(data:Array<Venda>) {
   const transacoesBody = document.getElementById('transacoesBody');
@@ -20,7 +37,7 @@ function mostrarTransacoes(data:Array<Venda>) {
       <tr>
         <td>${element.nome}</td>
         <td>${element.email}</td>
-        <td>R$ ${element.valor}</td>
+        <td>${element.valor ? converterParaMoeda(element.valor) : '-'}</td>
         <td>${element.pagamento}</td>
         <td>${element.status}</td>
       </tr>
@@ -28,16 +45,14 @@ function mostrarTransacoes(data:Array<Venda>) {
   })
 }
 
-function mostrarTotal(data:Array<Venda>) {
-  const total = document.getElementById('total');
-  let soma:number = 0;
-  data.forEach((element) => {
-    if(parseInt(element.valor.replace('.', ''))) {
-      soma += parseInt(element.valor.replace('.', ''));
-    }
-  });
-  if(total) total.innerText += ` R$ ${soma}`;
-}
+// function mostrarTotal(data:Array<Venda>) {
+//   const total = document.getElementById('total');
+//   let soma:number = 0;
+//   data.forEach((element) => {
+//     if(element.valor) soma += element.valor;
+//   });
+//   if(total) total.innerText += ` R$ ${soma}`;
+// }
 
 function mostrarPagamentos(data:Array<Venda>) {
   const pagamento = document.getElementById('pagamento');

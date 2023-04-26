@@ -32,8 +32,7 @@ declare global {
     nome: string;
     pagamento: TransacaoPagamento;
     email: string;
-    valor: string;
-    moeda: number | null;
+    valor: number | null;
     novo: boolean;
   }
 }
@@ -50,8 +49,7 @@ function normalizeDados(data: TransacaoAPI[]) {
         nome: element.Nome,
         pagamento: element["Forma de Pagamento"],
         email: element.Email,
-        moeda: converterMoeda(element["Valor (R$)"]),
-        valor: element["Valor (R$)"],
+        valor: converterMoeda(element["Valor (R$)"]),
         novo: Boolean(element["Cliente Novo"])
       }
     ]
