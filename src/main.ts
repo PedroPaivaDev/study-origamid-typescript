@@ -1,19 +1,6 @@
 import './style.css';
 import fetchData from './fetchData';
 
-declare global {
-  interface Venda {
-    status: string,
-    id: number,
-    data: Date,
-    nome: string,
-    pagamento: string,
-    email: string,
-    valor: string,
-    novo: boolean
-  }
-}
-
 async function mostrarDados() {
   const data = await fetchData('https://api.origamid.dev/json/transacoes.json');
   if(data) {
