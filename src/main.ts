@@ -1,14 +1,15 @@
 import './style.css';
 import fetchData from './fetchData';
 import Estatisticas from './Estatisticas';
+import { CountList } from './countBy';
 
 async function mostrarDados() {
   const data = await fetchData('https://api.origamid.dev/json/transacoes.json?');
   if(data) {
     mostrarTransacoes(data);
     // mostrarTotal(data);
-    mostrarPagamentos(data);
-    mostrarStatus(data);
+    // mostrarPagamentos(data);
+    // mostrarStatus(data);
     // mostrarDiaTopVendas(data);
     preencherEstatisticas(data);
   }
@@ -17,9 +18,20 @@ mostrarDados()
 
 function preencherEstatisticas(transacoes: Venda[]) {
   const data = new Estatisticas(transacoes);
-  const totalElement = document.querySelector<HTMLElement>("#total span");
+  const totalElement = document.querySelector<HTMLElement>("#total span");  
   if(totalElement) {
     totalElement.innerHTML = converterParaMoeda(data.total);
+  }
+  preencherLista(data.pagamento, 'pagamento');
+  preencherLista(data.status, 'status');
+}
+
+function preencherLista(lista: CountList, containerId: string): void {
+  const containerElement = document.getElementById(containerId);
+  if(containerElement) {
+    Object.keys(lista).forEach(key => {
+      containerElement.innerHTML += `<p>${key}: ${lista[key]}</p>`;
+    })
   }
 }
 
@@ -54,47 +66,47 @@ function mostrarTransacoes(data:Array<Venda>) {
 //   if(total) total.innerText += ` R$ ${soma}`;
 // }
 
-function mostrarPagamentos(data:Array<Venda>) {
-  const pagamento = document.getElementById('pagamento');
-  let credito:number = 0;
-  let boleto:number = 0;
-  data.forEach((element) => {
-    if(element.pagamento === 'Cartão de Crédito') {
-      credito += 1
-    } else {
-      boleto += 1
-    }
-  });
-  if(pagamento) pagamento.innerHTML = `
-    <p>Cartão de Crédito: ${credito}</p>
-    <p>Boleto: ${boleto}</p>
-  `;
-}
+// function mostrarPagamentos(data:Array<Venda>) {
+//   const pagamento = document.getElementById('pagamento');
+//   let credito:number = 0;
+//   let boleto:number = 0;
+//   data.forEach((element) => {
+//     if(element.pagamento === 'Cartão de Crédito') {
+//       credito += 1
+//     } else {
+//       boleto += 1
+//     }
+//   });
+//   if(pagamento) pagamento.innerHTML = `
+//     <p>Cartão de Crédito: ${credito}</p>
+//     <p>Boleto: ${boleto}</p>
+//   `;
+// }
 
-function mostrarStatus(data:Array<Venda>) {
-  const status = document.getElementById('status');
-  let paga:number = 0;
-  let recusada:number = 0;
-  let aguardando:number = 0;
-  let estornada:number = 0;
-  data.forEach((element) => {
-    if(element.status === 'Paga') {
-      paga += 1
-    } else if(element.status === 'Recusada pela operadora de cartão') {
-      recusada += 1
-    } else if(element.status === 'Aguardando pagamento') {
-      aguardando += 1
-    } else if(element.status === 'Estornada') {
-      estornada += 1
-    }
-  });
-  if(status) status.innerHTML = `
-    <p>Paga: ${paga}</p>
-    <p>Recusada pela operadora de cartão: ${recusada}</p>
-    <p>Aguardando pagamento: ${aguardando}</p>
-    <p>Estornada: ${estornada}</p>
-  `;
-}
+// function mostrarStatus(data:Array<Venda>) {
+//   const status = document.getElementById('status');
+//   let paga:number = 0;
+//   let recusada:number = 0;
+//   let aguardando:number = 0;
+//   let estornada:number = 0;
+//   data.forEach((element) => {
+//     if(element.status === 'Paga') {
+//       paga += 1
+//     } else if(element.status === 'Recusada pela operadora de cartão') {
+//       recusada += 1
+//     } else if(element.status === 'Aguardando pagamento') {
+//       aguardando += 1
+//     } else if(element.status === 'Estornada') {
+//       estornada += 1
+//     }
+//   });
+//   if(status) status.innerHTML = `
+//     <p>Paga: ${paga}</p>
+//     <p>Recusada pela operadora de cartão: ${recusada}</p>
+//     <p>Aguardando pagamento: ${aguardando}</p>
+//     <p>Estornada: ${estornada}</p>
+//   `;
+// }
 
 // function mostrarDiaTopVendas(data:Array<Venda>) {
 //   const dia = document.getElementById('dia');
