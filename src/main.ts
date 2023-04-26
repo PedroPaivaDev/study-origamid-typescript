@@ -2,7 +2,7 @@ import './style.css';
 import fetchData from './fetchData';
 
 async function mostrarDados() {
-  const data = await fetchData('https://api.origamid.dev/json/transacoes.json');
+  const data = await fetchData('https://api.origamid.dev/json/transacoes.json?');
   if(data) {
     mostrarTransacoes(data);
     mostrarTotal(data);
