@@ -18,12 +18,19 @@ mostrarDados()
 
 function preencherEstatisticas(transacoes: Venda[]) {
   const data = new Estatisticas(transacoes);
+
   const totalElement = document.querySelector<HTMLElement>("#total span");  
   if(totalElement) {
-    totalElement.innerHTML = converterParaMoeda(data.total);
+    totalElement.innerText = converterParaMoeda(data.total);
   }
+
   preencherLista(data.pagamento, 'pagamento');
   preencherLista(data.status, 'status');
+
+  const diaElement = document.querySelector<HTMLElement>("#dia span");  
+  if(diaElement) {
+    diaElement.innerText = data.melhorDia;
+  }
 }
 
 function preencherLista(lista: CountList, containerId: string): void {
