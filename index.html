@@ -1,31 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
+    <title>Projeto-Slide</title>
   </head>
   <body>
     <div id="app">
-      <h2>Estatísticas</h2>
-      <p id="total">Total: <span/> </p>
-      <div id="pagamento"></div>
-      <div id="status"></div>
-      <p id="dia">Dia com mais vendas: <span></span></p>
-      <h2>Dados</h2>
-      <table>
-        <thead>
-          <tr class="thead">
-            <th>Nome</th>
-            <th>Email</th>
-            <th>Compra</th>
-            <th>Pagamento</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="transacoesBody"></tbody>
-      </table>
+      <h1>Slide Stories</h1>
+      <div id="slide">
+        <div id="slide-elements">
+          <img class="active" src="./src/assets/imagem_1.jpg" alt="">
+          <img src="./src/assets/imagem_2.jpg" alt="">
+          <img src="./src/assets/imagem_3.jpg" alt="">
+          <video playsinline src="./src/assets/video.mp4"></video>
+        </div>
+        <div id="slide-controls"></div>
+      </div>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
