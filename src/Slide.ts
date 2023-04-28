@@ -57,6 +57,7 @@ export default class Slide {
 
   pause() {
     this.pausedTimeout = new Timeout(() => {
+      this.timeout?.pause();
       this.paused = true;
     }, 300);
   }
@@ -65,7 +66,7 @@ export default class Slide {
     this.pausedTimeout?.clear();
     if(this.paused) {
       this.paused = false;
-      this.auto(this.time); //preciso acionar novamente esse método, pois mesmo enquanto fica pausado, o 'auto' chama o 'next', mas o 'next' dá return, pq o 'paused' está 'true'. Aí não é chamado o próximo slide e pára tudo.
+      this.timeout?.continue(); //preciso acionar novamente um setTimeout, pois mesmo enquanto fica pausado, o 'auto' chama o 'next', mas o 'next' dá return, pq o 'paused' está 'true'. Aí não é chamado o próximo slide e pára tudo.
     }
   }
 
