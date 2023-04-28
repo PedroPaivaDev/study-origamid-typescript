@@ -1,3 +1,5 @@
+import Timeout from "./Timeout";
+
 export default class Slide {
   container;
   slides;
@@ -5,6 +7,7 @@ export default class Slide {
   time;
   index: number;
   slide: Element;
+  timeout: Timeout | null; //então o tipo é a interface da classe 'Timeout' criada ou 'null' para o momento que ele é iniciado
 
   constructor(container: Element, slides: Element[], controls: Element, time: number = 5000) {
     this.container = container;
@@ -12,6 +15,7 @@ export default class Slide {
     this.controls = controls;
     this.time = time;
 
+    this.timeout = null; //iniciado como null
     this.index = 0;
     this.slide = this.slides[this.index];
 
@@ -25,8 +29,14 @@ export default class Slide {
   show(index: number) {
     this.index = index;
     this.slide = this.slides[this.index];
-    this.slides.forEach(element => this.hide(element))
-    this.slide.classList.add('active')
+    this.slides.forEach(element => this.hide(element));
+    this.slide.classList.add('active');
+    this.auto(this.time); //só depois que é mostrada a imagem, que será chamado o 'auto'
+  }
+
+  auto(time: number) {
+    this.timeout?.clear(); //se não for 'null', ou seja, apenas se tiver um setTimeout anterior, o tempo será resetado pelo método 'clear'
+    this.timeout = new Timeout(() => this.next(), time); //a propriedade 'timeout' deixará de ser 'null' e receberá o objeto da classe Timeout, com as suas propriedades
   }
 
   prev() {
