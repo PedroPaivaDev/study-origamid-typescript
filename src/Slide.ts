@@ -8,6 +8,8 @@ export default class Slide {
   index: number;
   slide: Element;
   timeout: Timeout | null; //então o tipo é a interface da classe 'Timeout' criada ou 'null' para o momento que ele é iniciado
+  paused: boolean;
+  pausedTimeout: Timeout | null;
 
   constructor(container: Element, slides: Element[], controls: Element, time: number = 5000) {
     this.container = container;
@@ -15,9 +17,11 @@ export default class Slide {
     this.controls = controls;
     this.time = time;
 
-    this.timeout = null; //iniciado como null
     this.index = 0;
     this.slide = this.slides[this.index];
+    this.timeout = null; //iniciado como null
+    this.paused = false;
+    this.pausedTimeout = null;
 
     this.init();
   }
@@ -40,13 +44,29 @@ export default class Slide {
   }
 
   prev() {
+    if(this.paused) return;
     const prev = this.index > 0 ? this.index - 1 : this.slides.length -1;
     this.show(prev);
   }
 
   next() {
+    if(this.paused) return;
     const next = (this.index + 1) < this.slides.length ? this.index + 1 : 0;
     this.show(next);
+  }
+
+  pause() {
+    this.pausedTimeout = new Timeout(() => {
+      this.paused = true;
+    }, 300);
+  }
+
+  continue() {
+    this.pausedTimeout?.clear();
+    if(this.paused) {
+      this.paused = false;
+      this.auto(this.time); //preciso acionar novamente esse método, pois mesmo enquanto fica pausado, o 'auto' chama o 'next', mas o 'next' dá return, pq o 'paused' está 'true'. Aí não é chamado o próximo slide e pára tudo.
+    }
   }
 
   private addControls() {
@@ -56,6 +76,10 @@ export default class Slide {
     nextButton.innerText = "Slide Seguinte";
     this.controls.appendChild(prevButton);
     this.controls.appendChild(nextButton);
+
+    this.controls.addEventListener('pointerdown', () => this.pause());
+    this.controls.addEventListener('pointerup', () => this.continue());
+
     prevButton.addEventListener('pointerup', () => this.prev());
     nextButton.addEventListener('pointerup', () => this.next());
   }
