@@ -87,6 +87,7 @@ export default class Slide {
   }
 
   pause() {
+    document.body.classList.add('paused');
     this.pausedTimeout = new Timeout(() => {
       this.timeout?.pause();
       this.paused = true;
@@ -96,6 +97,7 @@ export default class Slide {
   }
 
   continue() {
+    document.body.classList.remove('paused');
     this.pausedTimeout?.clear();
     if(this.paused) {
       this.paused = false;
@@ -114,7 +116,8 @@ export default class Slide {
     this.controls.appendChild(nextButton);
 
     this.controls.addEventListener('pointerdown', () => this.pause());
-    this.controls.addEventListener('pointerup', () => this.continue());
+    document.addEventListener('pointerup', () => this.continue()); //quando solta o mouse, o vídeo continua
+    document.addEventListener('touchend', () => this.continue()); //quando solta o dedo, o vídeo continua
 
     prevButton.addEventListener('pointerup', () => this.prev());
     nextButton.addEventListener('pointerup', () => this.next());
