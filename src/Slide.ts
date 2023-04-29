@@ -10,6 +10,8 @@ export default class Slide {
   timeout: Timeout | null; //então o tipo é a interface da classe 'Timeout' criada ou 'null' para o momento que ele é iniciado
   paused: boolean;
   pausedTimeout: Timeout | null;
+  thumb: HTMLElement | null;
+  thumbItems: HTMLElement[] | null;
 
   constructor(container: Element, slides: Element[], controls: Element, time: number = 5000) {
     this.container = container;
@@ -22,9 +24,10 @@ export default class Slide {
     this.timeout = null; //iniciado como null
     this.paused = false;
     this.pausedTimeout = null;
+    this.thumb = null;
+    this.thumbItems = null;
 
     this.init();
-    console.log(Number(localStorage.getItem('activeSlide')))
   }
 
   hide(element: Element) {
@@ -38,7 +41,13 @@ export default class Slide {
   show(index: number) {
     this.index = index;
     this.slide = this.slides[this.index];
-    localStorage.setItem('activeSlide', JSON.stringify(this.index))
+    localStorage.setItem('activeSlide', JSON.stringify(this.index));
+
+    if(this.thumbItems) {
+      this.thumb = this.thumbItems[this.index];
+      this.thumbItems.forEach(item => item.classList.remove('active'));
+      this.thumb.classList.add('active');
+    }
 
     this.slides.forEach(element => this.hide(element));
     this.slide.classList.add('active');
@@ -62,6 +71,7 @@ export default class Slide {
   auto(time: number) {
     this.timeout?.clear(); //se não for 'null', ou seja, apenas se tiver um setTimeout anterior, o tempo será resetado pelo método 'clear'
     this.timeout = new Timeout(() => this.next(), time); //a propriedade 'timeout' deixará de ser 'null' e receberá o objeto da classe Timeout, com as suas propriedades
+    if(this.thumb) this.thumb.style.animationDuration = `${time}ms`;
   }
 
   prev() {
@@ -80,6 +90,7 @@ export default class Slide {
     this.pausedTimeout = new Timeout(() => {
       this.timeout?.pause();
       this.paused = true;
+      this.thumb?.classList.add('paused');
       if(this.slide instanceof HTMLVideoElement) this.slide.pause();
     }, 300);
   }
@@ -89,6 +100,7 @@ export default class Slide {
     if(this.paused) {
       this.paused = false;
       this.timeout?.continue(); //preciso acionar novamente um setTimeout, pois mesmo enquanto fica pausado, o 'auto' chama o 'next', mas o 'next' dá return, pq o 'paused' está 'true'. Aí não é chamado o próximo slide e pára tudo.
+      this.thumb?.classList.remove('paused');
       if(this.slide instanceof HTMLVideoElement) this.slide.play();
     }
   }
@@ -108,8 +120,19 @@ export default class Slide {
     nextButton.addEventListener('pointerup', () => this.next());
   }
 
+  addThumbItems() {
+    const thumbContainer = document.createElement('div');
+    thumbContainer.id = 'slide-thumb';
+    for (let i = 0; i < this.slides.length; i++) {
+      thumbContainer.innerHTML += `<span><span class="thumb-item"></span></span>`
+    }
+    this.controls.appendChild(thumbContainer);
+    this.thumbItems = Array.from(document.querySelectorAll('.thumb-item'))
+  }
+
   private init() {
     this.addControls();
+    this.addThumbItems();
     this.show(this.index);
   }
 }
