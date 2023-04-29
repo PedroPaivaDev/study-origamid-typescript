@@ -17,25 +17,46 @@ export default class Slide {
     this.controls = controls;
     this.time = time;
 
-    this.index = 0;
+    this.index = localStorage.getItem('activeSlide') ? Number(localStorage.getItem('activeSlide')) : 0;
     this.slide = this.slides[this.index];
     this.timeout = null; //iniciado como null
     this.paused = false;
     this.pausedTimeout = null;
 
     this.init();
+    console.log(Number(localStorage.getItem('activeSlide')))
   }
 
   hide(element: Element) {
     element.classList.remove('active');
+    if(element instanceof HTMLVideoElement) {
+      element.currentTime = 0;
+      element.pause();
+    }
   }
 
   show(index: number) {
     this.index = index;
     this.slide = this.slides[this.index];
+    localStorage.setItem('activeSlide', JSON.stringify(this.index))
+
     this.slides.forEach(element => this.hide(element));
     this.slide.classList.add('active');
-    this.auto(this.time); //só depois que é mostrada a imagem, que será chamado o 'auto'
+    if(this.slide instanceof HTMLVideoElement) {
+      this.autoVideo(this.slide);
+    } else {
+      this.auto(this.time); //só depois que é mostrada a imagem, que será chamado o 'auto'
+    }
+  }
+
+  autoVideo(video:HTMLVideoElement) {
+    video.muted = true;
+    video.play();
+    let firstPlay = true;
+    video.addEventListener('playing', () => {
+      if(firstPlay) this.auto(video.duration * 1000); //quando o vídeo ainda não está carregado, o retorno da propriedade 'duration' é 'NaN', por isso foi preciso colocar a execução dentro desse 'Event'
+      firstPlay = false; //para que o método 'auto' não seja chamado de novo após o vídeo ser pausado
+    })
   }
 
   auto(time: number) {
@@ -59,6 +80,7 @@ export default class Slide {
     this.pausedTimeout = new Timeout(() => {
       this.timeout?.pause();
       this.paused = true;
+      if(this.slide instanceof HTMLVideoElement) this.slide.pause();
     }, 300);
   }
 
@@ -67,6 +89,7 @@ export default class Slide {
     if(this.paused) {
       this.paused = false;
       this.timeout?.continue(); //preciso acionar novamente um setTimeout, pois mesmo enquanto fica pausado, o 'auto' chama o 'next', mas o 'next' dá return, pq o 'paused' está 'true'. Aí não é chamado o próximo slide e pára tudo.
+      if(this.slide instanceof HTMLVideoElement) this.slide.play();
     }
   }
 
